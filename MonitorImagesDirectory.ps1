@@ -1,7 +1,7 @@
  # Set up folder paths, file paths, and runtime configurations
 $UserHome = [Environment]::GetFolderPath("UserProfile")
 $downloadsPath = Join-Path $UserHome "Images"
-$copyImagesScriptPath = Join-Path $UserHome "ImageConversionScripts\HEIC2PNGv2.ps1"
+$copyImagesScriptPath = Join-Path $UserHome "ImageConversionScripts\HEIC2PNG.ps1"
 $logPath = Join-Path $UserHome "DownloadsMonitor.log"
 $waitTimeInSeconds = 30  # Interval between folder checks
 $timeoutPerFileInSeconds = 120  # Timeout per file processing
@@ -41,7 +41,7 @@ if (-not (Test-Path $copyImagesScriptPath)) {
 
 Write-Action "Script started at $(Get-Date)"
 
-# Function to run HEIC2PNGv2.ps1 script with a timeout
+# Function to run HEIC2PNG.ps1 script with a timeout
 function Run-HEIC2PNGWithTimeout {
     param (
         [string]$FilePath,  # File to process
@@ -49,12 +49,12 @@ function Run-HEIC2PNGWithTimeout {
     )
 
     try {
-        # Run the HEIC2PNGv2.ps1 script
+        # Run the HEIC2PNG.ps1 script
         $process = Start-Process -FilePath "powershell.exe" `
                                  -ArgumentList "-File `"$copyImagesScriptPath`" -FilePath `"$FilePath`"" `
                                  -NoNewWindow -PassThru
         if ($process.WaitForExit($TimeoutInSeconds * 1000)) {
-            Write-Action "Successfully processed file: $FilePath using HEIC2PNGv2.ps1"
+            Write-Action "Successfully processed file: $FilePath using HEIC2PNG.ps1"
         } else {
             Write-Warning "Timeout reached for file: $FilePath. Terminating process..."
             Write-Action "Timeout reached for file: $FilePath. Terminating process..."
@@ -69,7 +69,7 @@ function Run-HEIC2PNGWithTimeout {
             )
         }
     } catch {
-        Write-Action "Error occurred while processing file: $FilePath using HEIC2PNGv2.ps1. $_"
+        Write-Action "Error occurred while processing file: $FilePath using HEIC2PNG.ps1. $_"
 
         # Display error popup
         [System.Windows.Forms.MessageBox]::Show(
